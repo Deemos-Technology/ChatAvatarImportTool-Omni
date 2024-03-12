@@ -6,10 +6,6 @@ Generate 3D facial asset using [ChatAvatar - HyperHuman](https://hyperhuman.top)
 
 ChatAvatar is a new technology developed by Deemos Technology that creates hyper-realistic 3D facial assets with PBR textures through AI-powered conversations or pictures that can generate industry standard CG-friendly assets that can be used in Unity, UE, Cocos, Maya, Blender etc. This game-changing technology offers new horizons for immersive virtual experiences.
 
-## How to install the add-on
-
-WIP
-
 ## How to import your package
 
 1. Select "ChatAvatar Import Tool > Launch Import Tool"

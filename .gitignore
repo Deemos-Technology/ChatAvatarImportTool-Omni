@@ -2,7 +2,7 @@
 _*/
 
 .DS_Store
-**/.vscode/ipch
+**/.vscode/*
 
 # byte-compiled python files
 *.py[cod]
@@ -12,3 +12,4 @@ _*/
 /app
 /tools
 link_app.*
+exts/deemos.chatavatar.import_tool/deemos/chatavatar/import_tool/resources
