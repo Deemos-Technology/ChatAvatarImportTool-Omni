@@ -5,9 +5,12 @@ import string
 from os import PathLike
 from typing import Iterable
 
-def generate_safe_name_from_basename(basename: str) -> str:
-    if basename.endswith(".zip"):
-        basename = basename[:-4]
+def str_remove_suffix(in_str: str, suffix: str) -> str:
+    if in_str.endswith(suffix):
+        return in_str[:-len(suffix)]
+    return in_str
+
+def make_safe_pack_name(basename: str) -> str:
     basename = basename.replace(" ", "_")
     return basename
 

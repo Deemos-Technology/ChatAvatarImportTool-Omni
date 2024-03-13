@@ -83,14 +83,14 @@ class Pack:
         assert unpack_mode in {"temp", "local"}
         self.unpack_mode = unpack_mode
         self.original_zip_filepath = fp
-        basename = os.path.basename(fp)
-        self.pack_name = generate_safe_name_from_basename(basename)
+        basename_without_suffix = str_remove_suffix(os.path.basename(fp), ".zip")
+        self.pack_name = make_safe_pack_name(basename_without_suffix)
 
         if unpack_mode == "temp":
             self.temp_dir = tempfile.TemporaryDirectory()
-            self.unpack_path = os.path.join(self.temp_dir.name, basename)
+            self.unpack_path = os.path.join(self.temp_dir.name, basename_without_suffix)
         elif unpack_mode == "local":
-            self.unpack_path = os.path.join(os.path.dirname(self.original_zip_filepath), basename)
+            self.unpack_path = os.path.join(os.path.dirname(self.original_zip_filepath), basename_without_suffix)
 
         # Get metadata of package
         try:
