@@ -291,7 +291,7 @@ async def import_pack(
             material_binding_api = UsdShade.MaterialBindingAPI.Apply(target_prim)
             material_binding_api.Bind(UsdShade.Material(target_material_prim))
     
-    set_subdivision_scheme(model_prim)
+    set_subdiv_scheme_and_refinement(model_prim)
 
     main_stage.Save()
 
@@ -337,8 +337,10 @@ def material_usage_summary(parent_prim):
             })["users"].append(prim)
     return results
 
-def set_subdivision_scheme(parent_prim):
+def set_subdiv_scheme_and_refinement(parent_prim):
     for prim in Usd.PrimRange(parent_prim):
         if prim.IsA(UsdGeom.Mesh):
             mesh = UsdGeom.Mesh(prim)
             mesh.GetSubdivisionSchemeAttr().Set(UsdGeom.Tokens.catmullClark)
+            prim.CreateAttribute("refinementEnableOverride", Sdf.ValueTypeNames.Bool).Set(True)
+            prim.CreateAttribute("refinementLevel", Sdf.ValueTypeNames.Int, True).Set(2)
