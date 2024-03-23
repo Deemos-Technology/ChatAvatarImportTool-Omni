@@ -6,7 +6,6 @@ from .ChatAvatarPack import defs as CADefs
 import carb
 import omni.kit.asset_converter
 import tempfile
-import zipfile
 import os
 from datetime import datetime
 import re
@@ -175,36 +174,36 @@ async def import_pack(
 
     ## Import needed materials
     with tempfile.TemporaryDirectory() as temp_dir:
-        with zipfile.ZipFile(
-            os.path.join(
-                os.path.dirname(__file__),
-                "OmniChatAvatarImportTool_resources.zip"
+        needed_textures = set()
+        # Extract needed materials
+        for material in materials_need_to_apply:
+            temp_material_usda_path = os.path.join(
+                temp_dir,
+                f"{material}.material.usda"
             )
-        ) as resource_zipf:
-            needed_textures = set()
-            # Extract needed materials
-            for material in materials_need_to_apply:
-                temp_material_usda_path = os.path.join(
-                    temp_dir,
-                    f"{material}.material.usda"
-                )
-                with resource_zipf.open(f"resources/Shader/{material}.material.usda", "r") as material_zipf:
-                    material_content = material_zipf.read().decode()
-                    new_textures = re.findall(r'@(\{OMNI_TEXTURE_PATH\}/.+)@', material_content)
-                    needed_textures.update(new_textures)
-                    with open(temp_material_usda_path, "wb") as material_f:
-                        material_f.write(material_content.encode("utf-8"))
-            # Extract needed textures
-            for texture in needed_textures:
-                if os.path.exists(
-                    texture.format(OMNI_TEXTURE_PATH=omni_texture_path)
-                ):
-                    continue
-                extracted_path = texture.format(OMNI_TEXTURE_PATH=omni_texture_path)
-                os.makedirs(os.path.dirname(extracted_path), exist_ok=True)
-                with resource_zipf.open(texture.format(OMNI_TEXTURE_PATH="resources/Texture"), "r") as f1:
-                    with open(extracted_path, "wb") as f2:
-                        f2.write(f1.read())
+            with open(os.path.join(
+                os.path.dirname(__file__),
+                f"resources/Shader/{material}.material.usda"
+            ), "r") as material_f:
+                material_content = material_f.read()
+                new_textures = re.findall(r'@(\{OMNI_TEXTURE_PATH\}/.+)@', material_content)
+                needed_textures.update(new_textures)
+                with open(temp_material_usda_path, "wb") as material_f:
+                    material_f.write(material_content.encode("utf-8"))
+        # Extract needed textures
+        for texture in needed_textures:
+            if os.path.exists(
+                texture.format(OMNI_TEXTURE_PATH=omni_texture_path)
+            ):
+                continue
+            extracted_path = texture.format(OMNI_TEXTURE_PATH=omni_texture_path)
+            os.makedirs(os.path.dirname(extracted_path), exist_ok=True)
+            with open(os.path.join(
+                os.path.dirname(__file__),
+                texture.format(OMNI_TEXTURE_PATH="resources/Texture")
+            ), "r") as f1:
+                with open(extracted_path, "wb") as f2:
+                    f2.write(f1.read())
         
         new_materials = {}
         for material in materials_need_to_apply:

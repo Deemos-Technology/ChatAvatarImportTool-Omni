@@ -1,0 +1,1379 @@
+#usda 1.0
+(
+    defaultPrim = "Root"
+    upAxis = "Y"
+)
+
+def Xform "Root"
+{
+    def Material "Fluid" (
+        customData = {
+            dictionary ui = {
+                dictionary nodegraph = {
+                    dictionary node = {
+                        dictionary pos = {
+                            double2 output = (-139.97854614257812, -1.293485403060913)
+                        }
+                    }
+                }
+            }
+        }
+    )
+    {
+        token outputs:mdl:displacement.connect = </Root/Fluid/Shader.outputs:out>
+        token outputs:mdl:surface.connect = </Root/Fluid/Shader.outputs:out>
+        token outputs:mdl:volume.connect = </Root/Fluid/Shader.outputs:out>
+        token outputs:surface.connect = </Root/Fluid/Shader.outputs:out>
+        token outputs:volume.connect = </Root/Fluid/Shader.outputs:out>
+        token ui:displayGroup = "Material Graphs"
+        token ui:displayName = "Fluid"
+        int ui:order = 1024
+        uniform token[] xformOpOrder = []
+
+        def Shader "Shader" (
+            apiSchemas = ["NodeGraphNodeAPI"]
+        )
+        {
+            reorder properties = ["inputs:diffuse_reflection_weight", "inputs:diffuse_reflection_color", "inputs:diffuse_reflection_roughness", "inputs:metalness", "inputs:specular_reflection_weight", "inputs:specular_reflection_color", "inputs:specular_reflection_roughness", "inputs:specular_reflection_ior_preset", "inputs:specular_reflection_ior", "inputs:specular_reflection_anisotropy", "inputs:specular_reflection_anisotropy_rotation", "inputs:enable_specular_transmission", "inputs:specular_transmission_weight", "inputs:specular_transmission_color", "inputs:specular_transmission_scattering_depth", "inputs:specular_transmission_scattering_color", "inputs:specular_transmission_scatter_anisotropy", "inputs:specular_transmission_dispersion_abbe", "inputs:enable_diffuse_transmission", "inputs:subsurface_weight", "inputs:subsurface_scattering_colors_preset", "inputs:subsurface_transmission_color", "inputs:subsurface_scattering_color", "inputs:subsurface_scale", "inputs:subsurface_anisotropy", "inputs:coat_weight", "inputs:coat_color", "inputs:coat_roughness", "inputs:coat_ior_preset", "inputs:coat_ior", "inputs:coat_anisotropy", "inputs:coat_anisotropy_rotation", "inputs:coat_affect_color", "inputs:coat_affect_roughness", "inputs:coat_normal", "inputs:specular_retro_reflection_weight", "inputs:specular_retro_reflection_color", "inputs:specular_retro_reflection_roughness", "inputs:emission_weight", "inputs:emission_mode", "inputs:emission_intensity", "inputs:emission_color", "inputs:emission_use_temperature", "inputs:emission_temperature", "inputs:enable_thin_film", "inputs:thin_film_thickness", "inputs:thin_film_ior_preset", "inputs:thin_film_ior", "inputs:thin_walled", "inputs:enable_opacity", "inputs:geometry_opacity", "inputs:geometry_opacity_threshold", "inputs:geometry_normal", "inputs:geometry_displacement"]
+            uniform token info:implementationSource = "sourceAsset"
+            uniform asset info:mdl:sourceAsset = @OmniSurface/OmniSurfaceBase.mdl@
+            uniform token info:mdl:sourceAsset:subIdentifier = "OmniSurfaceBase"
+            float inputs:coat_affect_color = 0 (
+                customData = {
+                    float default = 0
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                    dictionary range = {
+                        float max = 1
+                        float min = 0
+                    }
+                }
+                displayGroup = "Coat"
+                displayName = "Affect Color"
+                hidden = false
+            )
+            float inputs:coat_affect_roughness = 0 (
+                customData = {
+                    float default = 0
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                    dictionary range = {
+                        float max = 1
+                        float min = 0
+                    }
+                }
+                displayGroup = "Coat"
+                displayName = "Affect Roughness"
+                hidden = false
+            )
+            float inputs:coat_anisotropy = 0 (
+                customData = {
+                    float default = 0
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                    dictionary range = {
+                        float max = 1
+                        float min = 0
+                    }
+                }
+                displayGroup = "Coat"
+                displayName = "Anisotropy"
+                hidden = false
+            )
+            float inputs:coat_anisotropy_rotation = 0 (
+                customData = {
+                    float default = 0
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                    dictionary soft_range = {
+                        float max = 1
+                        float min = 0
+                    }
+                }
+                displayGroup = "Coat"
+                displayName = "Rotation (radian)"
+                hidden = false
+            )
+            color3f inputs:coat_color = (1, 1, 1) (
+                customData = {
+                    float3 default = (1, 1, 1)
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                }
+                displayGroup = "Coat"
+                displayName = "Color"
+                hidden = false
+                renderType = "color"
+            )
+            float inputs:coat_ior = 1.5 (
+                customData = {
+                    float default = 1.5
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                    dictionary range = {
+                        float max = 3.4028235e38
+                        float min = 0
+                    }
+                    dictionary soft_range = {
+                        float max = 5
+                        float min = 1
+                    }
+                }
+                displayGroup = "Coat"
+                displayName = "IOR"
+                hidden = false
+            )
+            int inputs:coat_ior_preset = 99 (
+                customData = {
+                    int default = 99
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                }
+                displayGroup = "Coat"
+                displayName = "IOR Preset"
+                hidden = false
+                renderType = "::OmniSurface::OmniShared::ior_presets"
+                sdrMetadata = {
+                    string __SDR__enum_value = "ior_custom"
+                    string options = "ior_acrylic_glass:0|ior_air:1|ior_crystal:2|ior_diamond:3|ior_emerald:4|ior_ethanol:5|ior_flint_glass:6|ior_glass:7|ior_honey_21p_water:8|ior_human_eye_aqueous_humor:9|ior_human_eye_cornea:10|ior_human_eye_lens:11|ior_human_eye_vitreous_humor:12|ior_human_skin:13|ior_human_hair:14|ior_human_wet_hair:15|ior_ice:16|ior_milk:17|ior_olive_oil:18|ior_pearl:19|ior_plastic:20|ior_sapphire:21|ior_soap_bubble:22|ior_vacuum:23|ior_water_0c:24|ior_water_35c:25|ior_water_100c:26|ior_custom:99"
+                }
+            )
+            float3 inputs:coat_normal = (0, 0, 0) (
+                customData = {
+                    float3 default = (0, 0, 0)
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                }
+                displayGroup = "Coat"
+                displayName = "Normal"
+                hidden = true
+            )
+            float inputs:coat_roughness = 0.1 (
+                customData = {
+                    float default = 0.1
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                    dictionary range = {
+                        float max = 1
+                        float min = 0
+                    }
+                }
+                displayGroup = "Coat"
+                displayName = "Roughness"
+                hidden = false
+            )
+            float inputs:coat_weight = 0 (
+                customData = {
+                    float default = 0
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                    dictionary range = {
+                        float max = 1
+                        float min = 0
+                    }
+                }
+                displayGroup = "Coat"
+                displayName = "Weight"
+                hidden = false
+            )
+            color3f inputs:diffuse_reflection_color = (1, 1, 1) (
+                customData = {
+                    float3 default = (1, 1, 1)
+                }
+                displayGroup = "Base"
+                displayName = "Color"
+                hidden = false
+                renderType = "color"
+            )
+            float inputs:diffuse_reflection_roughness = 0 (
+                customData = {
+                    float default = 0
+                    dictionary range = {
+                        float max = 1
+                        float min = 0
+                    }
+                }
+                displayGroup = "Base"
+                displayName = "Diffuse Roughness"
+                hidden = false
+            )
+            float inputs:diffuse_reflection_weight = 1 (
+                customData = {
+                    float default = 0.8
+                    dictionary range = {
+                        float max = 1
+                        float min = 0
+                    }
+                }
+                displayGroup = "Base"
+                displayName = "Weight"
+                hidden = false
+            )
+            color3f inputs:emission_color = (1, 1, 1) (
+                customData = {
+                    float3 default = (1, 1, 1)
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                }
+                displayGroup = "Emission"
+                displayName = "Color"
+                hidden = false
+                renderType = "color"
+            )
+            float inputs:emission_intensity = 1 (
+                customData = {
+                    float default = 1
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                    dictionary soft_range = {
+                        float max = 1000
+                        float min = 0
+                    }
+                }
+                displayGroup = "Emission"
+                displayName = "Intensity"
+                hidden = false
+            )
+            int inputs:emission_mode = 0 (
+                customData = {
+                    int default = 0
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                }
+                displayGroup = "Emission"
+                displayName = "Emission Mode"
+                hidden = false
+                renderType = "::OmniSurface::OmniShared::emission_mode"
+                sdrMetadata = {
+                    string __SDR__enum_value = "emission_lx"
+                    string options = "emission_lx:0|emission_nt:1"
+                }
+            )
+            float inputs:emission_temperature = 6500 (
+                customData = {
+                    float default = 6500
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                    dictionary soft_range = {
+                        float max = 10000
+                        float min = 0
+                    }
+                }
+                displayGroup = "Emission"
+                displayName = "Temperature (kelvin)"
+                hidden = false
+            )
+            bool inputs:emission_use_temperature = 0 (
+                customData = {
+                    bool default = 0
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                }
+                displayGroup = "Emission"
+                displayName = "Use Temperature"
+                hidden = false
+            )
+            float inputs:emission_weight = 0 (
+                customData = {
+                    float default = 0
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                    dictionary range = {
+                        float max = 1
+                        float min = 0
+                    }
+                }
+                displayGroup = "Emission"
+                displayName = "Weight"
+                hidden = false
+            )
+            bool inputs:enable_diffuse_transmission = 0 (
+                customData = {
+                    bool default = 0
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                }
+                displayGroup = "Subsurface"
+                displayName = "Enable Subsurface"
+                doc = "Enables the use of subsurface"
+                hidden = false
+            )
+            bool inputs:enable_opacity = 1 (
+                customData = {
+                    bool default = 0
+                    dictionary displayGroup = {
+                        string state = "open"
+                    }
+                }
+                displayGroup = "Geometry"
+                displayName = "Enable Opacity"
+                doc = "Enables the use of cutout opacity"
+                hidden = false
+            )
+            bool inputs:enable_specular_transmission = 1 (
+                customData = {
+                    bool default = 0
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                }
+                displayGroup = "Transmission"
+                displayName = "Enable Transmission"
+                doc = "Enables the use of transmission"
+                hidden = false
+            )
+            bool inputs:enable_thin_film = 0 (
+                customData = {
+                    bool default = 0
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                }
+                displayGroup = "Thin Film"
+                displayName = "Enable Thin Film"
+                doc = "Enable the use of thin film"
+                hidden = false
+            )
+            bool inputs:excludeFromWhiteMode = 0 (
+                customData = {
+                    bool default = 0
+                }
+                displayGroup = "Material Flags"
+                displayName = "Exclude from White Mode"
+                hidden = false
+            )
+            float3 inputs:geometry_displacement = (0, 0, 0) (
+                customData = {
+                    float3 default = (0, 0, 0)
+                    dictionary displayGroup = {
+                        string state = "open"
+                    }
+                }
+                displayGroup = "Geometry"
+                displayName = "Displacement"
+                hidden = false
+            )
+            float3 inputs:geometry_normal = (0, 0, 0) (
+                customData = {
+                    float3 default = (0, 0, 0)
+                    dictionary displayGroup = {
+                        string state = "open"
+                    }
+                }
+                displayGroup = "Geometry"
+                displayName = "Geometry Normal"
+                hidden = true
+            )
+            float3 inputs:geometry_normal.connect = </Root/Fluid/normalmap_texture.outputs:out>
+            float inputs:geometry_opacity = 0.03 (
+                customData = {
+                    float default = 1
+                    dictionary displayGroup = {
+                        string state = "open"
+                    }
+                    dictionary range = {
+                        float max = 1
+                        float min = 0
+                    }
+                }
+                displayGroup = "Geometry"
+                displayName = "Opacity"
+                hidden = false
+            )
+            float inputs:geometry_opacity_threshold = 0 (
+                customData = {
+                    float default = 0
+                    dictionary displayGroup = {
+                        string state = "open"
+                    }
+                    dictionary range = {
+                        float max = 1
+                        float min = 0
+                    }
+                }
+                displayGroup = "Geometry"
+                displayName = "Opacity Threshold"
+                doc = "If > 0, remap opacity values to 1 when >= threshold and to 0 otherwise"
+                hidden = false
+            )
+            float inputs:metalness = 0.2 (
+                customData = {
+                    float default = 0
+                    dictionary range = {
+                        float max = 1
+                        float min = 0
+                    }
+                }
+                displayGroup = "Base"
+                displayName = "Metalness"
+                hidden = false
+            )
+            float inputs:specular_reflection_anisotropy = 0 (
+                customData = {
+                    float default = 0
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                    dictionary range = {
+                        float max = 1
+                        float min = 0
+                    }
+                }
+                displayGroup = "Specular"
+                displayName = "Anisotropy"
+                hidden = false
+            )
+            float inputs:specular_reflection_anisotropy_rotation = 0 (
+                customData = {
+                    float default = 0
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                    dictionary soft_range = {
+                        float max = 1
+                        float min = 0
+                    }
+                }
+                displayGroup = "Specular"
+                displayName = "Rotation (radian)"
+                hidden = false
+            )
+            color3f inputs:specular_reflection_color = (1, 1, 1) (
+                customData = {
+                    float3 default = (1, 1, 1)
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                }
+                displayGroup = "Specular"
+                displayName = "Color"
+                hidden = false
+                renderType = "color"
+            )
+            float inputs:specular_reflection_ior = 1.5 (
+                customData = {
+                    float default = 1.5
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                    dictionary range = {
+                        float max = 3.4028235e38
+                        float min = 0
+                    }
+                    dictionary soft_range = {
+                        float max = 5
+                        float min = 1
+                    }
+                }
+                displayGroup = "Specular"
+                displayName = "IOR"
+                hidden = false
+            )
+            int inputs:specular_reflection_ior_preset = 99 (
+                customData = {
+                    int default = 99
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                }
+                displayGroup = "Specular"
+                displayName = "IOR Preset"
+                hidden = false
+                renderType = "::OmniSurface::OmniShared::ior_presets"
+                sdrMetadata = {
+                    string __SDR__enum_value = "ior_custom"
+                    string options = "ior_acrylic_glass:0|ior_air:1|ior_crystal:2|ior_diamond:3|ior_emerald:4|ior_ethanol:5|ior_flint_glass:6|ior_glass:7|ior_honey_21p_water:8|ior_human_eye_aqueous_humor:9|ior_human_eye_cornea:10|ior_human_eye_lens:11|ior_human_eye_vitreous_humor:12|ior_human_skin:13|ior_human_hair:14|ior_human_wet_hair:15|ior_ice:16|ior_milk:17|ior_olive_oil:18|ior_pearl:19|ior_plastic:20|ior_sapphire:21|ior_soap_bubble:22|ior_vacuum:23|ior_water_0c:24|ior_water_35c:25|ior_water_100c:26|ior_custom:99"
+                }
+            )
+            float inputs:specular_reflection_roughness = 0.05 (
+                customData = {
+                    float default = 0.2
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                    dictionary range = {
+                        float max = 1
+                        float min = 0
+                    }
+                }
+                displayGroup = "Specular"
+                displayName = "Roughness"
+                hidden = false
+            )
+            float inputs:specular_reflection_weight = 1 (
+                customData = {
+                    float default = 1
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                    dictionary range = {
+                        float max = 1
+                        float min = 0
+                    }
+                }
+                displayGroup = "Specular"
+                displayName = "Weight"
+                hidden = false
+            )
+            float inputs:specular_reflection_weight.connect = </Root/Fluid/file_texture.outputs:mono>
+            color3f inputs:specular_retro_reflection_color = (1, 1, 1) (
+                customData = {
+                    float3 default = (1, 1, 1)
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                }
+                displayGroup = "Sheen"
+                displayName = "Color"
+                hidden = false
+                renderType = "color"
+            )
+            float inputs:specular_retro_reflection_roughness = 0.3 (
+                customData = {
+                    float default = 0.3
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                    dictionary range = {
+                        float max = 1
+                        float min = 0
+                    }
+                }
+                displayGroup = "Sheen"
+                displayName = "Roughness"
+                hidden = false
+            )
+            float inputs:specular_retro_reflection_weight = 0 (
+                customData = {
+                    float default = 0
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                    dictionary range = {
+                        float max = 1
+                        float min = 0
+                    }
+                }
+                displayGroup = "Sheen"
+                displayName = "Weight"
+                hidden = false
+            )
+            color3f inputs:specular_transmission_color = (1, 1, 1) (
+                customData = {
+                    float3 default = (1, 1, 1)
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                }
+                displayGroup = "Transmission"
+                displayName = "Color"
+                hidden = false
+                renderType = "color"
+            )
+            float inputs:specular_transmission_dispersion_abbe = 0 (
+                customData = {
+                    float default = 0
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                    dictionary range = {
+                        float max = 3.4028235e38
+                        float min = 0
+                    }
+                    dictionary soft_range = {
+                        float max = 100
+                        float min = 0
+                    }
+                }
+                displayGroup = "Transmission"
+                displayName = "Dispersion Abbe"
+                hidden = false
+            )
+            float inputs:specular_transmission_scatter_anisotropy = 0 (
+                customData = {
+                    float default = 0
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                    dictionary range = {
+                        float max = 1
+                        float min = -1
+                    }
+                }
+                displayGroup = "Transmission"
+                displayName = "Scatter Anisotropy"
+                hidden = false
+            )
+            color3f inputs:specular_transmission_scattering_color = (0, 0, 0) (
+                customData = {
+                    float3 default = (0, 0, 0)
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                }
+                displayGroup = "Transmission"
+                displayName = "Scatter"
+                hidden = false
+                renderType = "color"
+            )
+            float inputs:specular_transmission_scattering_depth = 0 (
+                customData = {
+                    float default = 0
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                    dictionary range = {
+                        float max = 3.4028235e38
+                        float min = 0
+                    }
+                    dictionary soft_range = {
+                        float max = 100
+                        float min = 0
+                    }
+                }
+                displayGroup = "Transmission"
+                displayName = "Depth"
+                hidden = false
+            )
+            float inputs:specular_transmission_weight = 1 (
+                customData = {
+                    float default = 0
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                    dictionary range = {
+                        float max = 1
+                        float min = 0
+                    }
+                }
+                displayGroup = "Transmission"
+                displayName = "Weight"
+                hidden = false
+            )
+            float inputs:subsurface_anisotropy = 0 (
+                customData = {
+                    float default = 0
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                    dictionary range = {
+                        float max = 1
+                        float min = -1
+                    }
+                }
+                displayGroup = "Subsurface"
+                displayName = "Anisotropy"
+                hidden = false
+            )
+            float inputs:subsurface_scale = 1 (
+                customData = {
+                    float default = 1
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                    dictionary range = {
+                        float max = 3.4028235e38
+                        float min = 0
+                    }
+                    dictionary soft_range = {
+                        float max = 10
+                        float min = 0
+                    }
+                }
+                displayGroup = "Subsurface"
+                displayName = "Scale"
+                hidden = false
+            )
+            color3f inputs:subsurface_scattering_color = (1, 1, 1) (
+                customData = {
+                    float3 default = (1, 1, 1)
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                }
+                displayGroup = "Subsurface"
+                displayName = "Radius (mfp)"
+                hidden = false
+                renderType = "color"
+            )
+            int inputs:subsurface_scattering_colors_preset = 12 (
+                customData = {
+                    int default = 12
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                }
+                displayGroup = "Subsurface"
+                displayName = "Scattering Presets"
+                hidden = false
+                renderType = "::OmniSurface::OmniShared::scattering_colors_presets"
+                sdrMetadata = {
+                    string __SDR__enum_value = "scattering_colors_custom"
+                    string options = "scattering_colors_apple:0|scattering_colors_chicken:1|scattering_colors_cream:2|scattering_colors_ketchup:3|scattering_colors_marble:4|scattering_colors_potato:5|scattering_colors_skim_milk:6|scattering_colors_whole_milk:7|scattering_colors_skin_1:8|scattering_colors_skin_2:9|scattering_colors_skin_3:10|scattering_colors_skin_4:11|scattering_colors_custom:12"
+                }
+            )
+            color3f inputs:subsurface_transmission_color = (1, 1, 1) (
+                customData = {
+                    float3 default = (1, 1, 1)
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                }
+                displayGroup = "Subsurface"
+                displayName = "Color"
+                hidden = false
+                renderType = "color"
+            )
+            float inputs:subsurface_weight = 0 (
+                customData = {
+                    float default = 0
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                    dictionary range = {
+                        float max = 1
+                        float min = 0
+                    }
+                }
+                displayGroup = "Subsurface"
+                displayName = "Weight"
+                hidden = false
+            )
+            float inputs:thin_film_ior = 1.5 (
+                customData = {
+                    float default = 1.52
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                    dictionary range = {
+                        float max = 3.4028235e38
+                        float min = 0
+                    }
+                    dictionary soft_range = {
+                        float max = 3
+                        float min = 1
+                    }
+                }
+                displayGroup = "Thin Film"
+                displayName = "IOR"
+                hidden = false
+            )
+            int inputs:thin_film_ior_preset = 99 (
+                customData = {
+                    int default = 99
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                }
+                displayGroup = "Thin Film"
+                displayName = "IOR Preset"
+                hidden = false
+                renderType = "::OmniSurface::OmniShared::ior_presets"
+                sdrMetadata = {
+                    string __SDR__enum_value = "ior_custom"
+                    string options = "ior_acrylic_glass:0|ior_air:1|ior_crystal:2|ior_diamond:3|ior_emerald:4|ior_ethanol:5|ior_flint_glass:6|ior_glass:7|ior_honey_21p_water:8|ior_human_eye_aqueous_humor:9|ior_human_eye_cornea:10|ior_human_eye_lens:11|ior_human_eye_vitreous_humor:12|ior_human_skin:13|ior_human_hair:14|ior_human_wet_hair:15|ior_ice:16|ior_milk:17|ior_olive_oil:18|ior_pearl:19|ior_plastic:20|ior_sapphire:21|ior_soap_bubble:22|ior_vacuum:23|ior_water_0c:24|ior_water_35c:25|ior_water_100c:26|ior_custom:99"
+                }
+            )
+            float inputs:thin_film_thickness = 400 (
+                customData = {
+                    float default = 400
+                    dictionary displayGroup = {
+                        string state = "closed"
+                    }
+                    dictionary range = {
+                        float max = 3.4028235e38
+                        float min = 0
+                    }
+                    dictionary soft_range = {
+                        float max = 2000
+                        float min = 0
+                    }
+                }
+                displayGroup = "Thin Film"
+                displayName = "Thickness (nm)"
+                hidden = false
+            )
+            bool inputs:thin_walled = 1 (
+                customData = {
+                    bool default = 0
+                    dictionary displayGroup = {
+                        string state = "open"
+                    }
+                }
+                displayGroup = "Geometry"
+                displayName = "Thin Walled"
+                doc = "Thin surface with no interior."
+                hidden = false
+            )
+            token outputs:out (
+                renderType = "material"
+            )
+            uniform token ui:nodegraph:node:expansionState = "open"
+            uniform float2 ui:nodegraph:node:pos = (-500.04883, -0.65871906)
+        }
+
+        def NodeGraph "file_texture" (
+            apiSchemas = ["NodeGraphNodeAPI"]
+        )
+        {
+            reorder properties = ["inputs:texture", "inputs:mono_source", "inputs:brightness", "inputs:contrast", "inputs:invert", "inputs:texture_space", "inputs:rotation", "inputs:translation", "inputs:scaling", "inputs:clip", "outputs:tex", "outputs:color", "outputs:mono", "outputs:r", "outputs:g", "outputs:b"]
+            float inputs:brightness (
+                customData = {
+                    double default = 1
+                    dictionary soft_range = {
+                        double max = 1
+                        double min = 0
+                    }
+                }
+                displayGroup = "Bitmap parameters"
+                displayName = "Brightness"
+                renderType = "float"
+            )
+            bool inputs:clip (
+                customData = {
+                    bool default = 0
+                }
+                displayGroup = "Placement"
+                displayName = "Clip"
+                renderType = "bool"
+            )
+            float inputs:contrast (
+                customData = {
+                    double default = 1
+                    dictionary soft_range = {
+                        double max = 1
+                        double min = 0
+                    }
+                }
+                displayGroup = "Bitmap parameters"
+                displayName = "Contrast"
+                renderType = "float"
+            )
+            bool inputs:invert (
+                customData = {
+                    bool default = 0
+                }
+                displayGroup = "Bitmap parameters"
+                displayName = "Invert image"
+                renderType = "bool"
+            )
+            int inputs:mono_source (
+                customData = {
+                    int default = 1
+                }
+                displayGroup = "Bitmap parameters"
+                displayName = "Scalar mode"
+                renderType = "mono_mode"
+                sdrMetadata = {
+                    string __SDR__enum_value = "mono_average"
+                    string options = "mono_alpha:0|mono_average:1|mono_luminance:2|mono_maximum:3"
+                }
+            )
+            float inputs:rotation (
+                customData = {
+                    double default = 0
+                }
+                displayGroup = "Placement"
+                displayName = "Rotation"
+                renderType = "float"
+            )
+            float2 inputs:scaling = (0.3, 0.3) (
+                customData = {
+                    double2 default = (1, 1)
+                }
+                displayGroup = "Placement"
+                displayName = "Tiling"
+                renderType = "float2"
+            )
+            asset inputs:texture = @{OMNI_TEXTURE_PATH}/T_lacrimal_h.png@ (
+                colorSpace = "raw"
+                customData = {
+                    asset default = @@
+                }
+                displayGroup = "Bitmap parameters"
+                displayName = "Bitmap file"
+                renderType = "texture_2d"
+            )
+            int inputs:texture_space (
+                customData = {
+                    int default = 0
+                    dictionary range = {
+                        int max = 3
+                        int min = 0
+                    }
+                }
+                displayGroup = "Placement"
+                displayName = "UV space index"
+                renderType = "int"
+            )
+            float2 inputs:translation (
+                customData = {
+                    double2 default = (0, 0)
+                }
+                displayGroup = "Placement"
+                displayName = "Offset"
+                renderType = "float2"
+            )
+            float outputs:b (
+                renderType = "float"
+            )
+            float outputs:b.connect = </Root/Fluid/file_texture/z.outputs:out>
+            color3f outputs:color (
+                renderType = "color"
+            )
+            color3f outputs:color.connect = </Root/Fluid/file_texture/construct_color.outputs:out>
+            float outputs:g (
+                renderType = "float"
+            )
+            float outputs:g.connect = </Root/Fluid/file_texture/y.outputs:out>
+            float outputs:mono (
+                renderType = "float"
+            )
+            float outputs:mono.connect = </Root/Fluid/file_texture/construct_float.outputs:out>
+            float outputs:r (
+                renderType = "float"
+            )
+            float outputs:r.connect = </Root/Fluid/file_texture/x.outputs:out>
+            token outputs:tex (
+                renderType = "texture_return"
+            )
+            token outputs:tex.connect = </Root/Fluid/file_texture/file_texture.outputs:out>
+            custom token ui:description = "Allows texturing using image files of various file formats"
+            uniform token ui:displayGroup = "Texturing, high level"
+            uniform token ui:displayName = "Bitmap texture"
+            uniform token ui:nodegraph:node:expansionState = "open"
+            uniform asset ui:nodegraph:node:icon = @core_definitions.file_texture.png@
+            uniform float2 ui:nodegraph:node:pos = (-876.05743, -17.949963)
+            custom int ui:order = 30
+
+            def Shader "file_texture"
+            {
+                reorder properties = ["inputs:texture", "inputs:mono_source", "inputs:brightness", "inputs:contrast", "inputs:invert", "inputs:texture_space", "inputs:rotation", "inputs:translation", "inputs:scaling", "inputs:clip"]
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @nvidia/core_definitions.mdl@
+                uniform token info:mdl:sourceAsset:subIdentifier = "file_texture(texture_2d,::base::mono_mode,float,float,float2,float2,float,bool,int,bool)"
+                float inputs:brightness (
+                    customData = {
+                        float default = 1
+                        dictionary soft_range = {
+                            float max = 1
+                            float min = 0
+                        }
+                    }
+                    displayGroup = "Bitmap parameters"
+                    displayName = "Brightness"
+                    hidden = false
+                    renderType = "float"
+                )
+                float inputs:brightness.connect = </Root/Fluid/file_texture.inputs:brightness>
+                bool inputs:clip (
+                    customData = {
+                        bool default = 0
+                    }
+                    displayGroup = "Placement"
+                    displayName = "Clip"
+                    doc = """If set to true, texture will not repeat. Outside of the texture, color will be black and the scalar value will be 0.
+
+"""
+                    hidden = false
+                    renderType = "bool"
+                )
+                bool inputs:clip.connect = </Root/Fluid/file_texture.inputs:clip>
+                float inputs:contrast (
+                    customData = {
+                        float default = 1
+                        dictionary soft_range = {
+                            float max = 1
+                            float min = 0
+                        }
+                    }
+                    displayGroup = "Bitmap parameters"
+                    displayName = "Contrast"
+                    hidden = false
+                    renderType = "float"
+                )
+                float inputs:contrast.connect = </Root/Fluid/file_texture.inputs:contrast>
+                bool inputs:excludeFromWhiteMode = 0 (
+                    customData = {
+                        bool default = 0
+                    }
+                    displayGroup = "Material Flags"
+                    displayName = "Exclude from White Mode"
+                    hidden = false
+                )
+                bool inputs:invert (
+                    customData = {
+                        bool default = 0
+                    }
+                    displayGroup = "Bitmap parameters"
+                    displayName = "Invert image"
+                    doc = """Invert image
+
+"""
+                    hidden = false
+                    renderType = "bool"
+                )
+                bool inputs:invert.connect = </Root/Fluid/file_texture.inputs:invert>
+                int inputs:mono_source (
+                    customData = {
+                        int default = 1
+                    }
+                    displayGroup = "Bitmap parameters"
+                    displayName = "Scalar mode"
+                    doc = """Defines how the texture applies to scalar parameters
+
+"""
+                    hidden = false
+                    renderType = "mono_mode"
+                    sdrMetadata = {
+                        string __SDR__enum_value = "mono_average"
+                        string options = "mono_alpha:0|mono_average:1|mono_luminance:2|mono_maximum:3"
+                    }
+                )
+                int inputs:mono_source.connect = </Root/Fluid/file_texture.inputs:mono_source>
+                float inputs:rotation (
+                    customData = {
+                        float default = 0
+                        dictionary soft_range = {
+                            float max = 360
+                            float min = 0
+                        }
+                    }
+                    displayGroup = "Placement"
+                    displayName = "Rotation"
+                    doc = """Rotation angle of the texture in degrees
+
+"""
+                    hidden = false
+                    renderType = "float"
+                )
+                float inputs:rotation.connect = </Root/Fluid/file_texture.inputs:rotation>
+                float2 inputs:scaling (
+                    customData = {
+                        float2 default = (1, 1)
+                    }
+                    displayGroup = "Placement"
+                    displayName = "Tiling"
+                    doc = """Controls the scale of the texture on the object
+
+"""
+                    hidden = false
+                    renderType = "float2"
+                )
+                float2 inputs:scaling.connect = </Root/Fluid/file_texture.inputs:scaling>
+                asset inputs:texture (
+                    colorSpace = "sRGB"
+                    customData = {
+                        asset default = @@
+                    }
+                    displayGroup = "Bitmap parameters"
+                    displayName = "Bitmap file"
+                    hidden = false
+                    renderType = "texture_2d"
+                )
+                asset inputs:texture.connect = </Root/Fluid/file_texture.inputs:texture>
+                int inputs:texture_space (
+                    customData = {
+                        int default = 0
+                        dictionary range = {
+                            int max = 3
+                            int min = 0
+                        }
+                    }
+                    displayGroup = "Placement"
+                    displayName = "UV space index"
+                    doc = """Selects a specific UV space
+
+"""
+                    hidden = false
+                    renderType = "int"
+                )
+                int inputs:texture_space.connect = </Root/Fluid/file_texture.inputs:texture_space>
+                float2 inputs:translation (
+                    customData = {
+                        float2 default = (0, 0)
+                    }
+                    displayGroup = "Placement"
+                    displayName = "Offset"
+                    doc = """Controls position of the texture on the object
+
+"""
+                    hidden = false
+                    renderType = "float2"
+                )
+                float2 inputs:translation.connect = </Root/Fluid/file_texture.inputs:translation>
+                token outputs:out (
+                    renderType = "texture_return"
+                )
+            }
+
+            def Shader "construct_float"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @nvidia/aux_definitions.mdl@
+                uniform token info:mdl:sourceAsset:subIdentifier = "construct_float(::base::texture_return)"
+                token inputs:a (
+                    hidden = false
+                    renderType = "texture_return"
+                )
+                token inputs:a.connect = </Root/Fluid/file_texture/file_texture.outputs:out>
+                bool inputs:excludeFromWhiteMode = 0 (
+                    customData = {
+                        bool default = 0
+                    }
+                    displayGroup = "Material Flags"
+                    displayName = "Exclude from White Mode"
+                    hidden = false
+                )
+                float outputs:out (
+                    renderType = "float"
+                )
+            }
+
+            def Shader "construct_color"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @nvidia/aux_definitions.mdl@
+                uniform token info:mdl:sourceAsset:subIdentifier = "construct_color(::base::texture_return)"
+                token inputs:a (
+                    hidden = false
+                    renderType = "texture_return"
+                )
+                token inputs:a.connect = </Root/Fluid/file_texture/file_texture.outputs:out>
+                bool inputs:excludeFromWhiteMode = 0 (
+                    customData = {
+                        bool default = 0
+                    }
+                    displayGroup = "Material Flags"
+                    displayName = "Exclude from White Mode"
+                    hidden = false
+                )
+                color3f outputs:out (
+                    renderType = "color"
+                )
+            }
+
+            def Shader "x"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @nvidia/aux_definitions.mdl@
+                uniform token info:mdl:sourceAsset:subIdentifier = "x(color)"
+                color3f inputs:a (
+                    customData = {
+                        float3 default = (0, 0, 0)
+                    }
+                    hidden = false
+                    renderType = "color"
+                )
+                color3f inputs:a.connect = </Root/Fluid/file_texture/construct_color.outputs:out>
+                bool inputs:excludeFromWhiteMode = 0 (
+                    customData = {
+                        bool default = 0
+                    }
+                    displayGroup = "Material Flags"
+                    displayName = "Exclude from White Mode"
+                    hidden = false
+                )
+                float outputs:out (
+                    renderType = "float"
+                )
+            }
+
+            def Shader "y"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @nvidia/aux_definitions.mdl@
+                uniform token info:mdl:sourceAsset:subIdentifier = "y(color)"
+                color3f inputs:a (
+                    customData = {
+                        float3 default = (0, 0, 0)
+                    }
+                    hidden = false
+                    renderType = "color"
+                )
+                color3f inputs:a.connect = </Root/Fluid/file_texture/construct_color.outputs:out>
+                bool inputs:excludeFromWhiteMode = 0 (
+                    customData = {
+                        bool default = 0
+                    }
+                    displayGroup = "Material Flags"
+                    displayName = "Exclude from White Mode"
+                    hidden = false
+                )
+                float outputs:out (
+                    renderType = "float"
+                )
+            }
+
+            def Shader "z"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @nvidia/aux_definitions.mdl@
+                uniform token info:mdl:sourceAsset:subIdentifier = "z(color)"
+                color3f inputs:a (
+                    customData = {
+                        float3 default = (0, 0, 0)
+                    }
+                    hidden = false
+                    renderType = "color"
+                )
+                color3f inputs:a.connect = </Root/Fluid/file_texture/construct_color.outputs:out>
+                bool inputs:excludeFromWhiteMode = 0 (
+                    customData = {
+                        bool default = 0
+                    }
+                    displayGroup = "Material Flags"
+                    displayName = "Exclude from White Mode"
+                    hidden = false
+                )
+                float outputs:out (
+                    renderType = "float"
+                )
+            }
+        }
+
+        def Shader "normalmap_texture" (
+            apiSchemas = ["NodeGraphNodeAPI"]
+        )
+        {
+            reorder properties = ["inputs:texture", "inputs:factor", "inputs:texture_space", "inputs:clip", "inputs:rotation", "inputs:flip", "inputs:translation", "inputs:scaling"]
+            uniform token info:implementationSource = "sourceAsset"
+            uniform asset info:mdl:sourceAsset = @nvidia/core_definitions.mdl@
+            uniform token info:mdl:sourceAsset:subIdentifier = "normalmap_texture"
+            bool inputs:clip (
+                customData = {
+                    bool default = 0
+                }
+                displayGroup = "Placement"
+                displayName = "Clip"
+                doc = """If set to true, texture will not repeat. Outside of the texture the surface will be flat.
+
+"""
+                hidden = false
+                renderType = "bool"
+            )
+            bool inputs:excludeFromWhiteMode = 0 (
+                customData = {
+                    bool default = 0
+                }
+                displayGroup = "Material Flags"
+                displayName = "Exclude from White Mode"
+                hidden = false
+            )
+            float inputs:factor (
+                customData = {
+                    float default = 1
+                    dictionary soft_range = {
+                        float max = 1
+                        float min = 0
+                    }
+                }
+                displayGroup = "Normal map parameters"
+                displayName = "Strength"
+                hidden = false
+                renderType = "float"
+            )
+            bool inputs:flip (
+                customData = {
+                    bool default = 0
+                }
+                displayGroup = "Placement"
+                displayName = "Flip V"
+                doc = """Flip handedness of the tangent space
+
+"""
+                hidden = false
+                renderType = "bool"
+            )
+            float inputs:rotation (
+                customData = {
+                    float default = 0
+                    dictionary soft_range = {
+                        float max = 360
+                        float min = 0
+                    }
+                }
+                displayGroup = "Placement"
+                displayName = "Rotation"
+                doc = """Rotation angle of the texture in degrees
+
+"""
+                hidden = false
+                renderType = "float"
+            )
+            float2 inputs:scaling = (0.3, 0.3) (
+                customData = {
+                    float2 default = (1, 1)
+                }
+                displayGroup = "Placement"
+                displayName = "Tiling"
+                doc = """Controls the scale of the texture on the object
+
+"""
+                hidden = false
+                renderType = "float2"
+            )
+            asset inputs:texture = @{OMNI_TEXTURE_PATH}/T_lacrimal_n.png@ (
+                colorSpace = "raw"
+                customData = {
+                    asset default = @@
+                }
+                displayGroup = "Normalmap parameters"
+                displayName = "Normalmap file"
+                hidden = false
+                renderType = "texture_2d"
+            )
+            int inputs:texture_space (
+                customData = {
+                    int default = 0
+                    dictionary range = {
+                        int max = 3
+                        int min = 0
+                    }
+                }
+                displayGroup = "Placement"
+                displayName = "UV space index"
+                doc = """Selects a specific UV space
+
+"""
+                hidden = false
+                renderType = "int"
+            )
+            float2 inputs:translation (
+                customData = {
+                    float2 default = (0, 0)
+                }
+                displayGroup = "Placement"
+                displayName = "Offset"
+                doc = """Controls position of the texture on the object
+
+"""
+                hidden = false
+                renderType = "float2"
+            )
+            float3 outputs:out (
+                renderType = "float3"
+            )
+            uniform token ui:nodegraph:node:expansionState = "open"
+            uniform float2 ui:nodegraph:node:pos = (-880.0963, 553.3792)
+        }
+    }
+}
+

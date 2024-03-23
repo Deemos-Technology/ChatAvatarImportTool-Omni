@@ -191,12 +191,12 @@ class DeemosChatavatarImport_toolExtension(omni.ext.IExt):
             **os.environ,
             "PYTHONPATH": ";".join([self.PySide6_path])
         }
-        carb.log_warn(
-            f"cd {os.path.dirname(__file__)}; "
-            f'$env:PYTHONPATH=\'{env["PYTHONPATH"]}\'; '
-            f"{' '.join(args)}; "
-            f"$env:PYTHONPATH=''"
-        )
+        # carb.log_warn(
+        #     f"cd {os.path.dirname(__file__)}; "
+        #     f'$env:PYTHONPATH=\'{env["PYTHONPATH"]}\'; '
+        #     f"{' '.join(args)}; "
+        #     f"$env:PYTHONPATH=''"
+        # )
         self.window_process = subprocess.Popen(
             args,
             cwd=os.path.dirname(__file__),
