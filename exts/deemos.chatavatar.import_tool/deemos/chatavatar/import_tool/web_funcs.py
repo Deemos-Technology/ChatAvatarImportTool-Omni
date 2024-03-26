@@ -109,7 +109,7 @@ class WebFuncs:
             )
         else:
             msg_box.setText(
-                f"Asset import failed! ({self.response_body['error_message']})"
+                f"Asset import failed! ({self.response_body['error_message']})\nDetailed error message can be found in your omni kit app's console window."
             )
         msg_box.setStandardButtons(QMessageBox.Ok)
         msg_box.exec()

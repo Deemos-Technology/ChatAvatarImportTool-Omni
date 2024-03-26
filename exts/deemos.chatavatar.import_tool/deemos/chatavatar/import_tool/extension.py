@@ -13,6 +13,7 @@ from .ChatAvatarPack import defs as CADefs
 from . import omni_funcs
 import asyncio
 import sys
+import traceback
 
 from typing import Dict, List, Optional, Union
 if sys.version_info >= (3, 8):
@@ -140,6 +141,7 @@ async def import_pack(request: ChatAvatarImportRequestModel) -> ChatAvatarRespon
         )
         await fut
     except Exception as e:
+        traceback.print_exc()
         return ChatAvatarResponseModel(success=False, error_message=f"{type(e).__name__}: {e}")
     else:
         return ChatAvatarResponseModel(success=True, error_message=None)
