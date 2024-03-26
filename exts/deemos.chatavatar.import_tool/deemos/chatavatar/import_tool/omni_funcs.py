@@ -201,7 +201,7 @@ async def import_pack(
             with open(os.path.join(
                 os.path.dirname(__file__),
                 texture.format(OMNI_TEXTURE_PATH="resources/Texture")
-            ), "r") as f1:
+            ), "rb") as f1:
                 with open(extracted_path, "wb") as f2:
                     f2.write(f1.read())
         

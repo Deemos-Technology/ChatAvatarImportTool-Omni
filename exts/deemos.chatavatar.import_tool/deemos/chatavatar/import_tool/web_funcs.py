@@ -71,6 +71,7 @@ class WebFuncs:
             headers = {'Content-type': 'application/json'}
             conn.request("POST", self.path + "/import", body=data, headers=headers)
             response = conn.getresponse()
+            self.response = response
             return f"{response.status} ({response.reason}): {response.read().decode}"
 
     def pre_import(
@@ -102,8 +103,13 @@ class WebFuncs:
         # Prompt OK and allow closing window
         msg_box = QMessageBox(qwindow)
         msg_box.setWindowTitle("ChatAvatar Import Tool")
-        msg_box.setText(
-            "Asset imported! You can now close the import tool window."
-        )
+        if 200 <= self.response.status < 300:
+            msg_box.setText(
+                "Asset imported! You can now close the import tool window."
+            )
+        else:
+            msg_box.setText(
+                f"Asset import failed! ({self.response.status} {self.response.reason}: {self.response.read().decode})"
+            )
         msg_box.setStandardButtons(QMessageBox.Ok)
         msg_box.exec()
