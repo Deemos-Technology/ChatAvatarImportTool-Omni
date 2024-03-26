@@ -119,26 +119,30 @@ async def ping():
     tags=["ChatAvatar"]
 )
 async def import_pack(request: ChatAvatarImportRequestModel) -> ChatAvatarResponseModel:
-    asyncio.ensure_future(
-        omni_funcs.import_pack(
-            model_path=request.model_path,
-            obj_name=request.obj_name,
-            texture_paths=request.texture_paths,
-            selected_pack=CADefs.PackInfo(
-                resolution=request.selected_pack_resolution,
-                topology=request.selected_pack_topology
-            ),
-            selected_additional=request.selected_additional,
-            available_additional=request.available_additional,
-            pack_name=request.pack_name,
-            additional_paths={
-                item["part"]: item["value"]
-                for item in request.additional_paths
-            },
+    try:
+        fut = asyncio.ensure_future(
+            omni_funcs.import_pack(
+                model_path=request.model_path,
+                obj_name=request.obj_name,
+                texture_paths=request.texture_paths,
+                selected_pack=CADefs.PackInfo(
+                    resolution=request.selected_pack_resolution,
+                    topology=request.selected_pack_topology
+                ),
+                selected_additional=request.selected_additional,
+                available_additional=request.available_additional,
+                pack_name=request.pack_name,
+                additional_paths={
+                    item["part"]: item["value"]
+                    for item in request.additional_paths
+                },
+            )
         )
-    )
-    # asyncio.wait_for(future, None)
-    return ChatAvatarResponseModel(success=True, error_message=None)
+        await fut
+    except Exception as e:
+        return ChatAvatarResponseModel(success=False, error_message=f"{type(e).__name__}: {e}")
+    else:
+        return ChatAvatarResponseModel(success=True, error_message=None)
 
 # Any class derived from `omni.ext.IExt` in top level module (defined in `python.modules` of `extension.toml`) will be
 # instantiated when extension gets enabled and `on_startup(ext_id)` will be called. Later when extension gets disabled
@@ -191,12 +195,12 @@ class DeemosChatavatarImport_toolExtension(omni.ext.IExt):
             **os.environ,
             "PYTHONPATH": ";".join([self.PySide6_path])
         }
-        # carb.log_warn(
-        #     f"cd {os.path.dirname(__file__)}; "
-        #     f'$env:PYTHONPATH=\'{env["PYTHONPATH"]}\'; '
-        #     f"{' '.join(args)}; "
-        #     f"$env:PYTHONPATH=''"
-        # )
+        carb.log_warn(
+            f"cd {os.path.dirname(__file__)}; "
+            f'$env:PYTHONPATH=\'{env["PYTHONPATH"]}\'; '
+            f"{' '.join(args)}; "
+            f"$env:PYTHONPATH=''"
+        )
         self.window_process = subprocess.Popen(
             args,
             cwd=os.path.dirname(__file__),
