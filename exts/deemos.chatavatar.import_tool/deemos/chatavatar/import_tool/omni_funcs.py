@@ -9,6 +9,7 @@ import tempfile
 import os
 from datetime import datetime
 import re
+from . import fbx_to_usd
 
 from pxr import Sdf, Usd, UsdShade, UsdGeom
 
@@ -116,6 +117,14 @@ async def import_pack(
     )
     os.makedirs(omni_import_dir, exist_ok=True)
     os.makedirs(omni_texture_path, exist_ok=True)
+
+    if model_path.endswith(".fbx"):
+        new_model_path = os.path.join(omni_import_dir, os.path.basename(model_path).replace(".fbx", ".usd"))
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            gltf_path = os.path.join(tmp_dir, "a.gltf")
+            fbx_to_usd.fbx2gltf(model_path, gltf_path)
+            fbx_to_usd.gltf2usd(gltf_path, new_model_path)
+        model_path = new_model_path
 
     output_usd_path = os.path.join(
         omni_import_dir,

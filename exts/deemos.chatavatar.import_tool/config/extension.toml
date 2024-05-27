@@ -1,6 +1,6 @@
 [package]
 # Semantic Versioning is used: https://semver.org/
-version = "1.0.3"
+version = "1.0.4"
 
 # Lists people or organizations that are considered the "authors" of the package.
 authors = ["Deemos Technology"]
@@ -40,7 +40,7 @@ icon = "data/icon.jpg"
 name = "deemos.chatavatar.import_tool"
 
 [python.pipapi]
-requirements = ["PySide6"]
+requirements = ["PySide6", "numpy", "scipy"]
 use_online_index = true
 
 # Settings of our extension:
