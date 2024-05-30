@@ -153,13 +153,22 @@ async def import_pack(
     model_prim.GetReferences().AddReference(model_path)
 
     # Do scaling
-    if (selected_additional & CADefs.AdditionalElements.RiggedBody) or \
-       model_path.endswith(".obj"):
+    if (selected_additional & CADefs.AdditionalElements.RiggedBody):
         xformable = UsdGeom.Xformable(model_prim)
         for op in xformable.GetOrderedXformOps():
             if op.GetOpType() == UsdGeom.XformOp.TypeScale:
                 # 找到现有的缩放操作，更新它的值
                 op.Set(value=(100.0, 100.0, 100.0))
+                break
+    
+    # orientation
+    if (selected_additional & CADefs.AdditionalElements.BlendShapes) or \
+       ((not (selected_additional & CADefs.AdditionalElements.RiggedBody)) and (model_path.endswith(".fbx"))):
+        xformable = UsdGeom.Xformable(model_prim)
+        for op in xformable.GetOrderedXformOps():
+            if op.GetOpType() == UsdGeom.XformOp.TypeRotateXYZ:
+                # 找到现有的缩放操作，更新它的值
+                op.Set(value=(90, 0, 0))
                 break
 
     # Create new prim(Scope) to hold new materials
