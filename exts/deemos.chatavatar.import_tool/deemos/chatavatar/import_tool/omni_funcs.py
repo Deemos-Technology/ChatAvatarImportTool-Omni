@@ -17,6 +17,8 @@ DEFAULT_MTLS = frozenset(["Face"])
 BACKHEAD_MTLS = frozenset(["Backhead"])
 COMPONENTS_MTLS = frozenset(["Eye","Eyelashes","Fluid","Occlusion","Teeth","Teeth_fluid"])
 
+DEBUG = False
+
 def determine_material_by_slot_name(
     slot_name: str,
     selected_pack: CADefs.PackInfo,
@@ -119,7 +121,10 @@ async def import_pack(
     os.makedirs(omni_texture_path, exist_ok=True)
 
     if model_path.endswith(".fbx"):
-        new_model_path = os.path.join(omni_import_dir, os.path.basename(model_path).replace(".fbx", ".usd"))
+        if DEBUG:
+            new_model_path = os.path.join(omni_import_dir, os.path.basename(model_path).replace(".fbx", ".usda"))
+        else:
+            new_model_path = os.path.join(omni_import_dir, os.path.basename(model_path).replace(".fbx", ".usd"))
         with tempfile.TemporaryDirectory() as tmp_dir:
             gltf_path = os.path.join(tmp_dir, "a.gltf")
             fbx_to_usd.fbx2gltf(model_path, gltf_path)

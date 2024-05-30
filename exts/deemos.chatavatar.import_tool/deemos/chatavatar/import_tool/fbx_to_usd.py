@@ -253,10 +253,15 @@ def gen_usd(gltf_data, out_file):
         vertices_count = max(np.max(mesh_gltf_prim["attributes"]["ORIGINAL_INDICES"])+1, vertices_count)
         faces_count = max(np.max(mesh_gltf_prim["faceindices"])+1, faces_count)
     
-    points = _merge_prim_arraies(
-        [prim["attributes"]["POSITION"] for prim in gltf_mesh_obj["primitives"]],
-        [prim["attributes"]["ORIGINAL_INDICES"] for prim in gltf_mesh_obj["primitives"]],
-        vertices_count
+    points_coord_convert = np.array([[1,0,0],[0,0,1],[0,-1,0]], dtype=float)
+    points = np.einsum(
+        "ni,ij->nj",
+        _merge_prim_arraies(
+            [prim["attributes"]["POSITION"] for prim in gltf_mesh_obj["primitives"]],
+            [prim["attributes"]["ORIGINAL_INDICES"] for prim in gltf_mesh_obj["primitives"]],
+            vertices_count
+        ),
+        points_coord_convert
     )
     mesh_prim.CreatePointsAttr(points, False)
     
@@ -366,19 +371,28 @@ def gen_usd(gltf_data, out_file):
         UsdSkel.BindingAPI.Apply(skel_prim.GetPrim())
         
         bind_transforms = []
-        rest_transforms = []
+        # rest_transforms = []
         joint_names = []
         for i, joint in enumerate(skin["joints"]):
             path = _get_node_path(joint, root_joint, nodes, nodes_parent)
             joint_names.append(path)
-            coord_convert = np.array([[1,0,0,0],[0,0,1,0],[0,-1,0,0],[0,0,0,1]], dtype=float)
-            bind_transform = np.linalg.inv(skin["inverseBindMatrices"][i]) @ coord_convert
-            rest_transform = _get_transform_from_node(nodes[joint]) @ coord_convert
+            
+            bind_coord_convert = np.array([[1,0,0,0],[0,0,1,0],[0,-1,0,0],[0,0,0,1]], dtype=float)
+            bind_transform = np.linalg.inv(skin["inverseBindMatrices"][i])
             bind_transforms.append(bind_transform)
-            rest_transforms.append(rest_transform)
+
+            # rest_coord_convert = np.array([[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]], dtype=float)
+            # rest_transform = _get_transform_from_node(nodes[joint])
+            # rest_transforms.append(rest_transform)
         skel_prim.CreateJointsAttr(joint_names, False)
-        skel_prim.CreateBindTransformsAttr(np.array(bind_transforms), False)
-        skel_prim.CreateRestTransformsAttr(np.array(bind_transforms), False)
+        skel_prim.CreateBindTransformsAttr(
+            np.einsum("nij,jk->nik", np.array(bind_transforms), bind_coord_convert),
+            False
+        )
+        # skel_prim.CreateRestTransformsAttr(
+        #     np.einsum("nij,jk->nik", np.array(bind_transforms), rest_coord_convert),
+        #     False
+        # )
 
         prims_joints, prims_weights = [], []
         element_sizes = []
@@ -389,7 +403,7 @@ def gen_usd(gltf_data, out_file):
                     joint_attributes.append(attribute)
                 elif attribute.startswith("WEIGHTS_"):
                     weight_attributes.append(attribute)
-            element_size = len(joint_attributes)
+            element_size = len(joint_attributes) * 4
             joint_attributes.sort(key=lambda x:int(x[len("JOINTS_"):]))
             weight_attributes.sort(key=lambda x:int(x[len("WEIGHTS_"):]))
             prim_joints = np.hstack([mesh_gltf_prim["attributes"][i] for i in joint_attributes])
@@ -436,8 +450,8 @@ def fbx2gltf(in_file, out_file, bin_path=find_fbx2gltf_bin()):
     ])
 
 if __name__ == "__main__":
-    fbx_path = r"C:\Users\ericc\Desktop\ChatAvatarPlugins\Omniverse_ChatAvatar_Plugin\Assets\USD_Audio2FaceTest_20240514\additional_body.fbx"
+    fbx_path = r"C:\Users\ericc\Desktop\ChatAvatarPlugins\ChatAvatarPacks\ChatAvatar_Test_Package\USCBasicPack\additional_body.fbx"
     gltf_path = fbx_path.replace(".fbx", ".gltf")
-    usda_path = r"C:\Users\ericc\Desktop\ChatAvatarPlugins\Omniverse_ChatAvatar_Plugin\Assets\USD_Audio2FaceTest_20240514\my_body.usda"
-    sfbx2gltf(fbx_path, gltf_path)
+    usda_path = r"C:\Users\ericc\Desktop\ChatAvatarPlugins\ChatAvatarPacks\ChatAvatar_Test_Package\Omni_Directory\ChatAvatar_Test_Package_20240529211659\additional_body.usda"
+    fbx2gltf(fbx_path, gltf_path)
     gltf2usd(gltf_path, usda_path)
