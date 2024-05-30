@@ -11,7 +11,7 @@ from datetime import datetime
 import re
 from . import fbx_to_usd
 
-from pxr import Sdf, Usd, UsdShade, UsdGeom
+from pxr import Sdf, Usd, UsdShade, UsdGeom, Gf
 
 DEFAULT_MTLS = frozenset(["Face"])
 BACKHEAD_MTLS = frozenset(["Backhead"])
@@ -163,12 +163,11 @@ async def import_pack(
     
     # orientation
     if (selected_additional & CADefs.AdditionalElements.BlendShapes) or \
-       ((not (selected_additional & CADefs.AdditionalElements.RiggedBody)) and (model_path.endswith(".fbx"))):
+       ((not (selected_additional & CADefs.AdditionalElements.RiggedBody)) and (model_path.endswith(".usd") or model_path.endswith(".usda"))):
         xformable = UsdGeom.Xformable(model_prim)
         for op in xformable.GetOrderedXformOps():
-            if op.GetOpType() == UsdGeom.XformOp.TypeRotateXYZ:
-                # 找到现有的缩放操作，更新它的值
-                op.Set(value=(90, 0, 0))
+            if op.GetOpType() == UsdGeom.XformOp.TypeOrient:
+                op.Set(value=Gf.Quatf(0.0, 1.0, 0.0, 0.0))
                 break
 
     # Create new prim(Scope) to hold new materials
