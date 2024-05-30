@@ -162,8 +162,8 @@ async def import_pack(
                 break
     
     # orientation
-    if (selected_additional & CADefs.AdditionalElements.BlendShapes) or \
-       ((not (selected_additional & CADefs.AdditionalElements.RiggedBody)) and (model_path.endswith(".usd") or model_path.endswith(".usda"))):
+    if (not (selected_additional & CADefs.AdditionalElements.RiggedBody)) and\
+       (model_path.endswith(".usd") or model_path.endswith(".usda")):
         xformable = UsdGeom.Xformable(model_prim)
         for op in xformable.GetOrderedXformOps():
             if op.GetOpType() == UsdGeom.XformOp.TypeOrient:
