@@ -3,8 +3,7 @@ from os import PathLike
 from typing import List
 import zipfile
 import tempfile
-import shutil
-# import bpy
+import glob
 from .defs import *
 from .utils import *
 import logging
@@ -70,7 +69,8 @@ class Pack:
     has_components = file_checker([
         [
             "USCBasicPack/additional_component.fbx",
-            "USCBasicPack/additional_component_neutral.obj" # When no blendshape applied
+            "USCBasicPack/additional_component.obj", # When no blendshape applied
+            "USCBasicPack/additional_component_neutral.obj", # When no blendshape applied
         ]
     ])
 
@@ -148,7 +148,8 @@ class Pack:
             if AdditionalElements.BlendShapes & self.additional_elements:
                 results[AdditionalElements.Components] = os.path.join(self.unpack_path, "USCBasicPack/additional_component.fbx")
             else:
-                results[AdditionalElements.Components] = os.path.join(self.unpack_path, "USCBasicPack/additional_component_neutral.obj")
+                obj_path = glob.glob(os.path.join(self.unpack_path, "USCBasicPack/additional_component*.obj")).pop()
+                results[AdditionalElements.Components] = obj_path
         if AdditionalElements.BlendShapes & self.additional_elements:
             results[AdditionalElements.BlendShapes] = os.path.join(self.unpack_path, "USCBasicPack/additional_blendshape.fbx")
         return results
